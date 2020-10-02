@@ -1,0 +1,10 @@
+.idea/
+.vscode/
+.pytest_cache/
+__pycache__/
+venv/
+env/
+app/config.py
+*.log
+migrations/
+test.py

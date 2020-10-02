@@ -1,26 +1,28 @@
-'''
+"""
 创建app
-'''
+"""
 from flask import Flask
-from mysql.connector import connect
+import click
 
-from app.config import AppConfig, dbconfig
+from app.config import AppConfig
 from app.controllers import users_bp, admin_bp
-from app.extensions import db, g
+from app.extensions import db, cors
 from app.models import *
-import os
 
 
-def create_app(config=AppConfig) -> Flask:
+def create_app() -> Flask:
     app = Flask(__name__)
-    app.config.from_object(config)
-    app.config['SECRET_KEY'] = os.urandom(24)
-    db.init_app(app)
+    app.config.from_object(AppConfig)
 
+    register_extensions(app)
     register_bp(app)
-    register_database(app)
-
+    register_commands(app)
     return app
+
+
+def register_extensions(app: Flask):
+    db.init_app(app)
+    cors.init_app(app)
 
 
 def register_bp(app: Flask):
@@ -28,15 +30,8 @@ def register_bp(app: Flask):
     app.register_blueprint(admin_bp)
 
 
-def register_database(app: Flask):
-    @app.before_request
-    def startup():
-        g.conn = connect(**dbconfig)
-        g.cursor = g.conn.cursor()
-
-    @app.after_request
-    def teardown(resp):
-        g.conn.commit()
-        g.cursor.close()
-        g.conn.close()
-        return resp
+def register_commands(app: Flask):
+    @app.cli.command()
+    def initdb():
+        db.create_all()
+        click.echo('Initialized database.')
