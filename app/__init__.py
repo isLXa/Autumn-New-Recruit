@@ -43,7 +43,7 @@ def register_errorhandler(app: Flask):
 
 def register_bp(app: Flask):
     app.register_blueprint(users_bp)
-    app.register_blueprint(admin_bp)
+    # app.register_blueprint(admin_bp)
 
 
 def register_commands(app: Flask):

@@ -24,10 +24,11 @@ def add_user(data: dict):
     db.session.commit()
 
 
-def updata_user(name, tel, sex, grade, college, dormitry, first, second, adjust, description):
-    user = User.query.filter(User.name == name and User.tel == tel).first()
+def update_user(name, tel, sex, grade,campus, college, dormitry, first, second, adjust, description):
+    user = User.query.filter(User.name == name, User.tel == tel).first()
     user.sex = sex
     user.grade = grade
+    user.campus = campus
     user.college = college
     user.dormitory = dormitry
     user.first = first
@@ -41,10 +42,7 @@ def query_user(name, tel):
     user = User.query.filter(User.name == name, User.tel == tel).first()
     if not user:
         return {}
-    return {"name": user.name, "tel": user.tel, "sex": user.sex, "grade": user.grade,
-            "college": user.college,
-            "dormitory": user.dormitory, "first": user.first, "second": user.second, "adjust": user.adjust,
-            "description": user.description}
+    return user.to_dict()
 
 
 def login_admin(name, password):

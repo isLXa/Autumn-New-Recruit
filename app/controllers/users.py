@@ -68,6 +68,7 @@ def updata():
     tel: str = data['tel']
     sex: str = data['sex']
     grade: str = data['grade']
+    campus: str = data['campus']
     college: str = data['college']
     dormitory: str = data['dormitory']
     first: str = data['first']
@@ -80,8 +81,8 @@ def updata():
             "msg": "手机号错误",
             "data": None
         }), 404
-
-    database.updata_user(name, tel, sex, grade, college, dormitory, first, second, adjust, description)
+    print('update')
+    database.update_user(name, tel, sex, grade,campus, college, dormitory, first, second, adjust, description)
     return jsonify({
         "status": 200,
         "msg": "修改成功",
